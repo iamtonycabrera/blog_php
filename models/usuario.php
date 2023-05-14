@@ -133,4 +133,28 @@
                 return true;
             }
         }
+
+        // Validar si el email existe
+        public function login($email, $password){
+            // Crear query
+            $query = 'SELECT * FROM ' . $this->table . ' WHERE email = :email AND password = :password';
+
+            // Encriptar el password
+            $passwordEncriptado = md5($password);
+
+            $stmt = $this->conn->prepare($query);
+
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            $stmt->bindParam(':password', $passwordEncriptado, PDO::PARAM_STR);
+
+            $stmt->execute();
+
+            $existeUsuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if(!$existeUsuario){
+                return false;
+            } else {
+                return true;
+            }
+        }
     }
