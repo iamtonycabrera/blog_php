@@ -5,6 +5,8 @@ include 'helpers/helper_format.php';
 include 'models/articulo.php';
 include 'models/usuario.php';
 include 'models/comentario.php';
+
+session_start();
 ?>
 
 <!doctype html>
