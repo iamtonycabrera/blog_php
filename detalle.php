@@ -18,6 +18,26 @@ $resultado = $articulos->leer_individual($idArticulo);
 $comentarios = new Comentario($db);
 $resultadoComentarios = $comentarios->comentariosDeArticulo($idArticulo);
 
+// Crear comentario
+if (isset($_POST['enviarComentario'])){
+    // Obtener el id
+    $idArticulo = $_POST['articulo'];
+    $email = $_POST['usuario'];
+    $comentario = $_POST['comentario'];
+
+    if (empty($email) || $email == "" || empty($comentario) || $comentario == "") {
+        $error = "Error, algunos campos estan vacios";
+    } else {
+        // Instanciar comentario
+        $comentarioObj = new Comentario($db);
+        if ($comentarioObj->crear($email, $comentario, $idArticulo)) {
+            $mensaje = "Comentario insertado correctamente";
+            echo("<script>location.href = '".RUTA_FRONT."'</script>");
+        } else {
+            $error = "Error al insertar el comentario";
+        }
+    }
+}
 ?>
 
 <div class="row">
@@ -56,15 +76,15 @@ $resultadoComentarios = $comentarios->comentariosDeArticulo($idArticulo);
         </div>
     </div>
 
-
+    <?php if(isset($_SESSION['autenticado'])) : ?>
     <div class="row">
 
         <div class="col-sm-6 offset-3">
             <form method="POST" action="">
-                <input type="hidden" name="articulo" value="">
+                <input type="hidden" name="articulo" value="<?php echo $idArticulo ?>">
                 <div class="mb-3">
                     <label for="usuario" class="form-label">Usuario:</label>
-                    <input type="text" class="form-control" name="usuario" id="usuario" value="juangarcia@gmail.com"
+                    <input type="text" class="form-control" name="usuario" id="usuario" value="<?php echo $_SESSION['email'];?>"
                         readonly>
                 </div>
 
@@ -79,6 +99,7 @@ $resultadoComentarios = $comentarios->comentariosDeArticulo($idArticulo);
             </form>
         </div>
     </div>
+    <?php endif ?>
 
 </div>
 

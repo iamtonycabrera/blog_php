@@ -56,6 +56,39 @@
             return $comentario;
         }
 
+        // Crear un nuevo comentario
+        public function crear($email, $comentario, $idArticulo){
+
+            // Obtener el id del usuario usando el email
+            $query = 'SELECT * FROM usuarios WHERE email = :email';
+            // Preparar la sentencia
+            $stmt = $this->conn->prepare($query);
+            // Vincular parametro
+            $stmt->bindParam(':email', $email);
+            // Ejecutar query
+            $stmt->execute();
+            $usuario = $stmt->fetch(PDO::FETCH_OBJ);
+            $idUsuario = $usuario->id;
+
+            // Crear query para la insercion del comentario
+            $query2 = 'INSERT INTO ' . $this->table . ' (comentario, usuario_id, articulo_id, estado)
+            VALUES(:comentario, :usuario_id, :articulo_id, 0)';
+
+            // Preparar la sentencia
+            $stmt = $this->conn->prepare($query2);
+            // Vincular parametro
+            $stmt->bindParam(':comentario', $comentario, PDO::PARAM_STR);
+            $stmt->bindParam(':usuario_id', $idUsuario, PDO::PARAM_INT);
+            $stmt->bindParam(':articulo_id', $idArticulo, PDO::PARAM_INT);
+
+            // Ejecutar query
+            if ($stmt->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         // Actualizar un articulo
         public function actualizar($idComentario, $estado){
 
