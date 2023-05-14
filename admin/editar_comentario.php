@@ -15,6 +15,41 @@
     $comentarios = new Comentario($db);
     $resultado = $comentarios->leer_individual($id); 
 
+    // Editar Comentario
+    // Validar si se presiono el boton
+    if (isset($_POST['editarComentario'])){
+        // Obtener el id
+        $idComentario = $_POST['id'];
+        $estado = $_POST['cambiarEstado'];
+
+        // Instanciar usuario
+        $comentario = new Comentario($db);
+
+        if ($comentario->actualizar($idComentario, $estado)) {
+            $mensaje = "Comentario actualizado correctamente";
+            header("Location:comentarios.php?mensaje=" . urlencode($mensaje));
+        } else {
+            $error = "Error al modificar el comentario";
+        }
+    }
+
+    // Borrar Comentario
+    // Validar si se presiono el boton
+    if (isset($_POST['borrarComentario'])){
+        // Obtener el id
+        $idComentario = $_POST['id'];
+
+        // Instanciar usuario
+        $comentario = new Comentario($db);
+
+        if ($comentario->borrar($idComentario)) {
+            $mensaje = "Comentario eliminado correctamente";
+            header("Location:comentarios.php?mensaje=" . urlencode($mensaje));
+        } else {
+            $error = "Error al borrar el comentario";
+        }
+    }
+
 ?>
 
 <div class="row">

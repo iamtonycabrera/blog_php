@@ -57,17 +57,16 @@
         }
 
         // Actualizar un articulo
-        public function actualizar($idUsuario, $nombre, $rol){
+        public function actualizar($idComentario, $estado){
 
-                $query = 'UPDATE ' . $this->table . ' SET nombre = :nombre, rol_id = :rol_id WHERE id = :id';
+                $query = 'UPDATE ' . $this->table . ' SET estado = :estado WHERE id = :id';
 
                 // Preparar la sentencia
                 $stmt = $this->conn->prepare($query);
 
                 // Vincular parametro
-                $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
-                $stmt->bindParam(':rol_id', $rol, PDO::PARAM_INT);
-                $stmt->bindParam(':id', $idUsuario, PDO::PARAM_INT);
+                $stmt->bindParam(':id', $idComentario, PDO::PARAM_INT);
+                $stmt->bindParam(':estado', $estado, PDO::PARAM_INT);
 
                 // Ejecutar query
                 if ($stmt->execute()) {
@@ -77,14 +76,14 @@
             printf("Error: ", $stmt->error);
         }
 
-        public function borrar($idUsuario){
+        public function borrar($idComentario){
             $query = 'DELETE FROM ' . $this->table . ' WHERE id = :id';
 
             // Preparar la sentencia
             $stmt = $this->conn->prepare($query);
 
             // Vincular parametro
-            $stmt->bindParam(':id', $idUsuario, PDO::PARAM_INT);
+            $stmt->bindParam(':id', $idComentario, PDO::PARAM_INT);
 
             // Ejecutar query
             if ($stmt->execute()) {
