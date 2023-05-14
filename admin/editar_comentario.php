@@ -1,8 +1,34 @@
-<?php include("../includes/header.php") ?>
+<?php 
+
+    include("../includes/header.php");
+
+    // Instanciar db y conn
+    $baseDatos = new Basemysql();
+    $db = $baseDatos->connect();
+
+    // Validar si se envio el id
+    if (isset($_GET['id'])) {
+        $id = $_GET['id'];
+    }
+
+    // Instanciar el objeto usuario
+    $comentarios = new Comentario($db);
+    $resultado = $comentarios->leer_individual($id); 
+
+?>
 
 <div class="row">
-          
+    <div class="col-sm-12">
+        <?php if (isset($error)): ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>
+                    <?php echo $error ?>
+                </strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif ?>
     </div>
+</div>
 
 <div class="row">
         <div class="col-sm-6">
@@ -13,18 +39,18 @@
         <div class="col-sm-6 offset-3">
         <form method="POST" action=""> 
 
-            <input type="hidden" name="id" value="4">
+            <input type="hidden" name="id" value="<?php echo $resultado->comentario_id ?>">
 
             <div class="mb-3">
                 <label for="texto">Texto</label>   
                 <textarea class="form-control" placeholder="Escriba el texto de su artículo" name="texto" style="height: 200px" readonly>
-                texto descripcion demo
+                <?php echo $resultado->comentario ?>
                 </textarea>              
             </div>               
 
             <div class="mb-3">
                 <label for="usuario" class="form-label">Usuario:</label>
-                <input type="text" class="form-control" value="juan@gmail.com" readonly>               
+                <input type="text" class="form-control" value="<?php echo $resultado->nombre_usuario ?>" readonly>               
             </div>
 
             <div class="mb-3">
