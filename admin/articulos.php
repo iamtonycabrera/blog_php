@@ -1,5 +1,25 @@
-<?php include("../includes/header.php") ?>
+<?php
+    include("../includes/header.php");
+    
+    // Instanciar db y conn
+    $baseDatos = new Basemysql();
+    $db = $baseDatos->connect();
 
+    // Instanciar el objeto articulo
+    $articulos = new Articulo($db);
+    $resultado = $articulos->leer();
+?>
+
+<div class="row">
+    <div class="col-sm-12">
+        <?php if(isset($_GET['mensaje'])) : ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong><?php echo $_GET['mensaje'] ?></strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif ?>
+    </div>
+</div>
 
 <div class="row">
     <div class="col-sm-6">
@@ -23,20 +43,20 @@
                     </tr>
                 </thead>
                 <tbody>
-             
+             <?php foreach ($resultado as $articulo) : ?>
                     <tr>
-                        <td>1</td>
-                        <td>test</td>
+                        <td><?php echo $articulo->id ?></td>
+                        <td><?php echo $articulo->titulo ?></td>
                         <td>
-                            <img class="img/articulos/" style="width:180px;">
+                            <img class="img-fluid" src="<?php echo RUTA_FRONT . "img/articulos/" . $articulo->imagen ?>" style="width:180px;">
                         </td>
-                        <td>test</td>
-                        <td>test</td>                      
+                        <td><?php echo $articulo->texto ?></td>
+                        <td><?php echo $articulo->fecha_creacion ?></td>                      
                         <td>
-                        <a href="editar_articulo.php" class="btn btn-warning"><i class="bi bi-pencil-fill"></i></a>                       
+                        <a href="editar_articulo.php?id=<?php echo $articulo->id; ?>" class="btn btn-warning"><i class="bi bi-pencil-fill"></i></a>                       
                         </td>
                     </tr>
-               
+               <?php endforeach ?>
                 </tbody>       
             </table>
     </div>
