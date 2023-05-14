@@ -96,7 +96,10 @@
 
         // Registrarse
         public function registro($nombre, $email, $password){
-            $query = 'INSERT INTO ' . $this->table . ' (nombre, email, password, rol_id)VALUES(:nombre, :email, :password, :rol_id)';
+            $query = 'INSERT INTO ' . $this->table . ' (nombre, email, password, rol_id)VALUES(:nombre, :email, :password, 2)';
+
+            // Encriptar el password
+            $passwordEncriptado = md5($password);
 
             // Preparar la sentencia
             $stmt = $this->conn->prepare($query);
@@ -104,7 +107,7 @@
             // Vincular parametro
             $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
             $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-            $stmt->bindParam(':password', $password, PDO::PARAM_STR);
+            $stmt->bindParam(':password', $passwordEncriptado, PDO::PARAM_STR);
 
             // Ejecutar query
             if ($stmt->execute()) {
@@ -113,5 +116,21 @@
 
             // Si hay error
             printf("Error: ", $stmt->error);
+        }
+
+        // Validar si el email existe
+        public function validar_email($email){
+            $query = 'SELECT * FROM ' . $this->table . ' WHERE email = :email';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            $stmt->execute();
+
+            $registroEmail = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if($registroEmail){
+                return false;
+            } else {
+                return true;
+            }
         }
     }

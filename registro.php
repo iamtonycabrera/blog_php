@@ -20,21 +20,23 @@ if (isset($_POST['registrarse'])) {
     } else {
         // Si entra aqui es porque se enviaron todos los campos
         // Validamos que los passwords coincidan
-        if($password =! $confirmarPassword){
+        if($password != $confirmarPassword){
             $error = "Error La contraseña no coincide";
         } else {
             // Instanciar articulo
             $usuario = new Usuario($db);
 
-            if ($usuario->registro($nombre, $email, $password)) {
-                $mensaje = "Usuario registrado correctamente. Accede";
-                header("Location:acceder.php");
+            // Validar si email existe
+            if($usuario->validar_email($email)){
+                if ($usuario->registro($nombre, $email, $password)) {
+                    $mensaje = "Usuario registrado correctamente. Accede";
+                } else {
+                    $error = "No se puedo registrar el usuario";
+                }
             } else {
-                $error = "No se puedo registrar el usuario";
+                $error = "Error. Este email ya existe en base de datos";
             }
         }
-
-        
     }
 }
 ?>
@@ -45,6 +47,19 @@ if (isset($_POST['registrarse'])) {
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong>
                     <?php echo $error ?>
+                </strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif ?>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <?php if (isset($mensaje)): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>
+                    <?php echo $mensaje ?>
                 </strong>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
