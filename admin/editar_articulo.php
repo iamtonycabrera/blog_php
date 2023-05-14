@@ -5,8 +5,6 @@ include("../includes/header.php");
 $baseDatos = new Basemysql();
 $db = $baseDatos->connect();
 
-$id = null;
-
 // Validar si se envio el id
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
