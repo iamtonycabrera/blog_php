@@ -30,6 +30,7 @@ if (isset($_POST['registrarse'])) {
             if($usuario->validar_email($email)){
                 if ($usuario->registro($nombre, $email, $password)) {
                     $mensaje = "Usuario registrado correctamente. Accede";
+                    echo ("<script>location.href = '" . RUTA_FRONT . "acceder.php?mensaje=$mensaje'</script>");
                 } else {
                     $error = "No se puedo registrar el usuario";
                 }
