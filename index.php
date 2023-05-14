@@ -21,8 +21,8 @@ $resultado = $articulos->leer();
                 <img src="<?php echo RUTA_FRONT; ?>img/articulos/<?php echo $articulo->imagen ?>" class="card-img-top">
                 <div class="card-body">
                     <h5 class="card-title"><?php echo $articulo->titulo ?></h5>
-                    <p><strong><?php echo $articulo->fecha_creacion ?></strong></p>
-                    <p class="card-text"><?php echo $articulo->texto ?></p>
+                    <p><strong><?php echo formatearFecha($articulo->fecha_creacion) ?></strong></p>
+                    <p class="card-text"><?php echo textoCorto($articulo->texto) ?></p>
                     <a href="detalle.php?id=<?php echo $articulo->id ?>" class="btn btn-primary">Ver más</a>
                 </div>
             </div>
