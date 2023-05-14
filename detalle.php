@@ -1,4 +1,20 @@
-<?php include("includes/header_front.php") ?>
+<?php
+
+include("includes/header_front.php");
+
+// Instanciar db y conn
+$baseDatos = new Basemysql();
+$db = $baseDatos->connect();
+
+if(isset($_GET['id'])){
+    $idArticulo = $_GET['id'];
+}
+
+// Instanciar el objeto articulo
+$articulos = new Articulo($db);
+$resultado = $articulos->leer_individual($idArticulo);
+
+?>
 
     <div class="row">
        
@@ -17,14 +33,14 @@
             <div class="col-sm-12">
                 <div class="card">
                    <div class="card-header">
-                        <h1>Título</h1>
+                        <h1><?php echo $resultado->titulo ?></h1>
                    </div>
                     <div class="card-body">
                         <div class="text-center">
-                            <img class="img-fluid img-thumbnail" src="img/articulos/img1.jpg">
+                            <img class="img-fluid img-thumbnail" src="<?php echo RUTA_FRONT; ?>img/articulos/<?php echo $resultado->imagen ?>">
                         </div>
 
-                        <p>texto prueba</p>
+                        <p><?php echo $resultado->texto ?></p>
 
                     </div>
                 </div>

@@ -1,46 +1,33 @@
-<?php include("includes/header_front.php") ?>
+<?php
 
-    <div class="container-fluid">
-        <h1 class="text-center">Artículos</h1>
-        <div class="row">
-       
-            <div class="col-sm-4">
-                <div class="card">
-                    <img src="img/articulos/img1.jpg" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title">Título demo</h5>
-                        <p><strong>2020-12-25</strong></p>
-                        <p class="card-text">Texto demo</p>
-                        <a href="detalle.php" class="btn btn-primary">Ver más</a>
-                    </div>
+include("includes/header_front.php");
+
+// Instanciar db y conn
+$baseDatos = new Basemysql();
+$db = $baseDatos->connect();
+
+// Instanciar el objeto articulo
+$articulos = new Articulo($db);
+$resultado = $articulos->leer();
+
+?>
+
+<div class="container-fluid">
+    <h1 class="text-center">Artículos</h1>
+    <div class="row">
+        <?php foreach ($resultado as $articulo) : ?>
+        <div class="col-sm-4">
+            <div class="card">
+                <img src="<?php echo RUTA_FRONT; ?>img/articulos/<?php echo $articulo->imagen ?>" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title"><?php echo $articulo->titulo ?></h5>
+                    <p><strong><?php echo $articulo->fecha_creacion ?></strong></p>
+                    <p class="card-text"><?php echo $articulo->texto ?></p>
+                    <a href="detalle.php?id=<?php echo $articulo->id ?>" class="btn btn-primary">Ver más</a>
                 </div>
             </div>
-
-            <div class="col-sm-4">
-                <div class="card">
-                    <img src="img/articulos/img3.jpg" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title">Título demo</h5>
-                        <p><strong>2020-12-25</strong></p>
-                        <p class="card-text">Texto demo</p>
-                        <a href="detalle.php" class="btn btn-primary">Ver más</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-4">
-                <div class="card">
-                    <img src="img/articulos/img5.jpg" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title">Título demo</h5>
-                        <p><strong>2020-12-25</strong></p>
-                        <p class="card-text">Texto demo</p>
-                        <a href="detalle.php" class="btn btn-primary">Ver más</a>
-                    </div>
-                </div>
-            </div>
-      
-        </div>            
+        </div>
+        <?php endforeach ?>
     </div>
+</div>
 <?php include("includes/footer.php") ?>
-       
