@@ -75,6 +75,7 @@
             printf("Error: ", $stmt->error);
         }
 
+        // Borrar
         public function borrar($idUsuario){
             $query = 'DELETE FROM ' . $this->table . ' WHERE id = :id';
 
@@ -83,6 +84,27 @@
 
             // Vincular parametro
             $stmt->bindParam(':id', $idUsuario, PDO::PARAM_INT);
+
+            // Ejecutar query
+            if ($stmt->execute()) {
+                return true;
+            }
+
+            // Si hay error
+            printf("Error: ", $stmt->error);
+        }
+
+        // Registrarse
+        public function registro($nombre, $email, $password){
+            $query = 'INSERT INTO ' . $this->table . ' (nombre, email, password, rol_id)VALUES(:nombre, :email, :password, :rol_id)';
+
+            // Preparar la sentencia
+            $stmt = $this->conn->prepare($query);
+
+            // Vincular parametro
+            $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            $stmt->bindParam(':password', $password, PDO::PARAM_STR);
 
             // Ejecutar query
             if ($stmt->execute()) {
