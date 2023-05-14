@@ -93,4 +93,26 @@
             // Si hay error
             printf("Error: ", $stmt->error);
         }
+
+        // Cargar comentarios de articulo por el id
+        public function comentariosDeArticulo($idArticulo){
+            // Crear query
+            $query = 'SELECT c.id AS comentario_id, c.comentario AS comentario, 
+            c.estado AS estado, c.fecha_creacion AS fecha, c.usuario_id, 
+            u.email AS nombre_usuario 
+            FROM ' . $this->table . ' c INNER JOIN usuarios u ON u.id = c.usuario_id
+            WHERE articulo_id = :articulo_id AND estado = 1';
+
+             // Preparar la sentencia
+             $stmt = $this->conn->prepare($query);
+
+             // Vincular parametro
+             $stmt->bindParam(':articulo_id', $idArticulo, PDO::PARAM_INT);
+
+             // Ejecutar query
+            $stmt->execute();
+
+            $comentarios = $stmt->fetchAll(PDO::FETCH_OBJ);
+            return $comentarios;
+        }
     }
